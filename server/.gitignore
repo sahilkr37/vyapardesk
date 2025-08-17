@@ -1,7 +1,7 @@
-# Ignore node modules folder (heavy, can be restored with npm install)
+# Node.js Dependencies
 node_modules/
 
-# Ignore environment variables file containing sensitive info
+# Environment variables file (contains sensitive info)
 .env
 
 # Logs
@@ -9,17 +9,39 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Optional debug/output folders (if any)
+# Directory for production builds (if any)
 dist/
 build/
 
-# OS-specific files
+# IDE/editor specific folders and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS generated files
 .DS_Store
 Thumbs.db
 
-# IDE/editor config files (optional)
-.vscode/
-.idea/
+# Optional: Coverage reports (from testing)
+coverage/
 
-# Mac system files (optional)
-.DS_Store
+# Optional: Debug files
+*.log
+
+# Optional: lock files
+package-lock.json
+yarn.lock
+
+# Optional: Temporary files/folders
+tmp/
+temp/
+
+# Optional: npm cache folder
+.npm/
+
+# Optional: Mac system files
+.AppleDouble/
+.LSOverride
