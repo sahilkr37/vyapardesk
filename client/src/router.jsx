@@ -1,26 +1,34 @@
-// src/router.jsx
 import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import AddProduct from "./pages/AddProduct";
 import ListProduct from "./pages/ListProduct";
 import Staffs from "./pages/Staffs";
-
-const isAuthenticated = () => !!localStorage.getItem("token");
+import Layout from "./components/Layout";
 
 export default function Router() {
+    const location = useLocation();
+    const isAuthenticated = !!localStorage.getItem("token");
+
     return (
-        <Routes>
+        <Routes location={location}>
+            {/* Public routes */}
             <Route path="/" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            {/* Protect these routes below */}
-            <Route path="/dashboard" element={isAuthenticated() ? <Dashboard /> : <Navigate to="/" />} />
-            <Route path="/add-product" element={isAuthenticated() ? <AddProduct /> : <Navigate to="/" />} />
-            <Route path="/products" element={isAuthenticated() ? <ListProduct /> : <Navigate to="/" />} />
-            <Route path="/staffs" element={isAuthenticated() ? <Staffs /> : <Navigate to="/" />} />
-            <Route path="*" element={<Navigate to="/" />} />
+
+            {/* Protected routes with Layout */}
+            {isAuthenticated ? (
+                <Route element={<Layout />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/add-product" element={<AddProduct />} />
+                    <Route path="/products" element={<ListProduct />} />
+                    <Route path="/staffs" element={<Staffs />} />
+                </Route>
+            ) : (
+                <Route path="*" element={<Navigate to="/" />} />
+            )}
         </Routes>
     );
 }

@@ -8,7 +8,12 @@ const productSchema = new mongoose.Schema({
     cost: { type: Number },
     brand: { type: String },
     description: { type: String },
-    quantity: { type: Number, required: true }
+    quantity: { type: Number, required: true },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",           // Or "Business" if you have a separate model
+        required: true,
+    },
 });
 
 module.exports = mongoose.model('Product', productSchema);

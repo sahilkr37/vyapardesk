@@ -1,5 +1,8 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+
+
+
 import {
     Home,
     PlusCircle,
@@ -19,17 +22,15 @@ export default function Navbar({ children }) {
     const location = useLocation();
 
     return (
-        <div className="flex min-h-screen">
-            <nav className="w-64 bg-gray-900 text-white flex flex-col">
-                <div className="p-6 text-2xl font-bold border-b border-gray-700">
-                    Your Brand
-                </div>
+        <div className="fixed top-16 left-0 min-h-[calc(100vh-4rem)] bg-white flex">
+            <nav className="w-60  flex flex-col">
+
                 <ul className="flex-1">
                     {links.map(({ name, path, icon }) => (
                         <li key={name}>
                             <Link
                                 to={path}
-                                className={`flex items-center gap-3 p-4 hover:bg-gray-700 transition ${location.pathname === path ? "bg-gray-700" : ""
+                                className={`flex items-center gap-3 p-4 hover:bg-gray-200 transition ${location.pathname === path ? "bg-gray-200" : ""
                                     }`}
                             >
                                 {icon}
@@ -38,20 +39,20 @@ export default function Navbar({ children }) {
                         </li>
                     ))}
                 </ul>
-                <div className="p-4 border-t border-gray-700">
+                <div className="p-4 border-t bg-[#3b38a0]">
                     <button
                         onClick={() => {
                             localStorage.removeItem("token");
                             window.location.href = "/";
                         }}
-                        className="flex items-center gap-2 w-full hover:text-red-500 transition"
+                        className="flex items-center  text-white gap-2 w-full hover:bg-[#2e2a80]"
                     >
                         <LogOut size={20} />
                         Logout
                     </button>
                 </div>
             </nav>
-            <main className="flex-1 bg-gray-100 p-6 overflow-auto">{children}</main>
+            <main className="flex-1 bg-gray-200 p-6 overflow-auto">{children}</main>
         </div>
     );
 }
