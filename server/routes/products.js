@@ -1,15 +1,14 @@
 const express = require('express');
 const Product = require('../models/Product');
-const authMiddleware = require('../middleware/authMiddleware'); // adjust path as needed
+const authMiddleware = require('../middleware/authMiddleware'); 
 
 const router = express.Router();
 
-// Add product — require auth
+// Add product 
 router.post('/', authMiddleware, async (req, res) => {
     try {
         const { name, code, category, price, cost, brand, description, quantity } = req.body;
 
-        // check if product with same code exists for this user
         const exists = await Product.findOne({ code, owner: req.user.id });
         if (exists) {
             return res.status(400).json({ msg: 'Product with this code already exists' });

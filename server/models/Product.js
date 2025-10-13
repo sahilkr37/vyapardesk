@@ -11,7 +11,7 @@ const productSchema = new mongoose.Schema({
     quantity: { type: Number, required: true },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",           // Or "Business" if you have a separate model
+        ref: "User",
         required: true,
     },
 });
