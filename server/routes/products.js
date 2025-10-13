@@ -1,10 +1,14 @@
 const express = require('express');
 const Product = require('../models/Product');
 const authMiddleware = require('../middleware/authMiddleware');
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+const XLSX = require("xlsx");
+const fs = require("fs");
+
 
 const router = express.Router();
 
-// Add product 
 router.post('/', authMiddleware, async (req, res) => {
     try {
         const { name, category, price, cost, brand, description, quantity } = req.body;
@@ -22,7 +26,6 @@ router.post('/', authMiddleware, async (req, res) => {
     }
 });
 
-// Get all products for current user
 router.get('/', authMiddleware, async (req, res) => {
     try {
         const products = await Product.find({ owner: req.user.id }).sort({ createdAt: -1 });
@@ -76,4 +79,49 @@ router.delete('/:id', authMiddleware, async (req, res) => {
         res.status(500).json({ msg: 'Server error' });
     }
 });
+
+// Bulk upload products
+router.post("/bulk-upload", authMiddleware, upload.single("file"), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ msg: "No file uploaded" });
+
+        const workbook = XLSX.readFile(req.file.path);
+        const sheetName = workbook.SheetNames[0];
+        const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+        if (!data.length) return res.status(400).json({ msg: "Empty file" });
+
+        const products = data.map((p) => ({
+            name: p.name,
+            category: p.category,
+            price: Number(p.price),
+            cost: Number(p.cost),
+            brand: p.brand,
+            description: p.description,
+            quantity: Number(p.quantity),
+            owner: req.user.id,
+        }));
+
+        await Product.insertMany(products);
+
+        // Delete temporary uploaded file
+        fs.unlink(req.file.path, (err) => {
+            if (err) console.error("Failed to delete temp file:", err);
+        });
+        res.json({ msg: `${products.length} products uploaded successfully` });
+    } catch (err) {
+        console.error(err);
+        if (req.file) {
+            fs.unlink(req.file.path, (unlinkErr) => {
+                if (unlinkErr) console.error("Failed to delete temp file:", unlinkErr);
+            });
+        }
+        res.status(500).json({ msg: "Server error" });
+    }
+});
+
+
+
+
+
 module.exports = router;
