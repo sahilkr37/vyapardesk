@@ -40,7 +40,7 @@ export default function Dashboard() {
     const inventoryValues = products.map(p => p.price * p.quantity);
 
     return (
-        <div className="max-w-6xl mx-auto p-6 bg-white rounded-lg shadow space-y-6">
+        <div className="ml-70 w-5xl mx-auto p-6 bg-white rounded-lg shadow space-y-6">
             <h1 className="text-3xl font-bold text-[#3b38a0] mb-4">Smart Analytics Dashboard</h1>
             {err && <p className="text-red-600">{err}</p>}
 

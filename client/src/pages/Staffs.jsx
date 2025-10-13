@@ -8,7 +8,7 @@ export default function Staffs({
     ],
 }) {
     return (
-        <div className="max-w-5xl mx-auto p-6 bg-white rounded-lg shadow">
+        <div className="ml-70 w-5xl mx-auto p-6 bg-white rounded-lg shadow">
             <h1 className="text-2xl font-bold mb-6 text-[#3b38a0]">Staffs</h1>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 {staffs.map((staff, idx) => (

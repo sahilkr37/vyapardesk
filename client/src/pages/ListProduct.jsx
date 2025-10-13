@@ -57,7 +57,7 @@ export default function ListProduct() {
 
     return (
         <div className="relative">
-            <div className="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow">
+            <div className="ml-70 w-5xl mx-auto bg-white p-6 rounded-xl shadow">
                 <div className="flex justify-between">
                     <h1 className="text-2xl font-bold mb-6 text-[#3b38a0]">Product List</h1>
                     <button
