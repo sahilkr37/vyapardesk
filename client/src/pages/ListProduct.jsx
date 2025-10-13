@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getProducts, deleteProduct } from "../api/products";
 import { Search, Edit3, Trash2 } from "lucide-react";
 import AddProduct from "./AddProduct";
+import useDownloadCSV from "../hooks/useDownloadCSV";
 
 export default function ListProduct() {
     const [products, setProducts] = useState([]);
@@ -9,6 +10,7 @@ export default function ListProduct() {
     const [search, setSearch] = useState("");
     const [open, setOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const downloadCSV = useDownloadCSV();
 
     useEffect(() => {
         const loadProducts = async () => {
@@ -56,8 +58,17 @@ export default function ListProduct() {
     return (
         <div className="relative">
             <div className="max-w-6xl mx-auto bg-white p-6 rounded-xl shadow">
-                <h1 className="text-2xl font-bold mb-6 text-[#3b38a0]">Product List</h1>
+                <div className="flex justify-between">
+                    <h1 className="text-2xl font-bold mb-6 text-[#3b38a0]">Product List</h1>
+                    <button
+                        onClick={() => downloadCSV(products, "products.csv")}
+                        className="px-2 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition cursor-pointer"
+                    >
+                        Download CSV
+                    </button>
+                </div>
                 <p className="text-gray-500 mb-4">Browse and manage your products</p>
+
 
                 {/* Search */}
                 <div className="relative mb-6">
@@ -79,7 +90,6 @@ export default function ListProduct() {
                         <thead>
                             <tr className="bg-gray-50 text-gray-600 uppercase text-xs">
                                 <th className="px-6 py-3">Product</th>
-                                <th className="px-6 py-3">Code</th>
                                 <th className="px-6 py-3">Category</th>
                                 <th className="px-6 py-3">Price</th>
                                 <th className="px-6 py-3">Brand</th>
@@ -103,7 +113,6 @@ export default function ListProduct() {
                                         <p className="font-medium text-gray-900">{p.name}</p>
                                         <p className="text-xs text-gray-500 truncate max-w-[200px]">{p.description}</p>
                                     </td>
-                                    <td className="px-6 py-4 text-gray-700">{p.code}</td>
                                     <td className="px-6 py-4 text-gray-700">{p.category}</td>
                                     <td className="px-6 py-4 text-gray-900 font-medium">${p.price}</td>
                                     <td className="px-6 py-4 text-gray-700">{p.brand}</td>
