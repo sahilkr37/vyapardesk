@@ -39,7 +39,6 @@ export default function ListProduct() {
     const filteredProducts = products.filter(
         (p) =>
             p.name.toLowerCase().includes(search.toLowerCase()) ||
-            p.code.toLowerCase().includes(search.toLowerCase()) ||
             p.category.toLowerCase().includes(search.toLowerCase()) ||
             p.brand.toLowerCase().includes(search.toLowerCase())
     );
