@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { addProduct, updateProduct } from "../api/products";
-import { Package, Tag, DollarSign, Hash, FileText } from "lucide-react";
+import { Package, Tag, DollarSign, Hash, FileText, Upload } from "lucide-react";
+import BulkUploadDialog from "../components/BulkUploadDialog";
 
 export default function AddProduct({ existingProduct, onClose, isEdit }) {
     const [form, setForm] = useState({
@@ -56,6 +57,14 @@ export default function AddProduct({ existingProduct, onClose, isEdit }) {
             setErr(error.response?.data?.msg || "Failed to save product");
         }
     };
+
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    const handleUploadSuccess = () => {
+        // optional: refresh product list after bulk upload
+        console.log("Upload successful");
+    };
+
 
     return (
         <div className="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
@@ -191,6 +200,19 @@ export default function AddProduct({ existingProduct, onClose, isEdit }) {
                     </button>
                 </div>
             </form>
+            <button
+                onClick={() => setIsDialogOpen(true)}
+                className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 flex items-center gap-2 cursor-pointer"
+            >
+                <Upload size={16} /> Bulk Upload
+            </button>
+
+            {/* Dialog */}
+            <BulkUploadDialog
+                isOpen={isDialogOpen}
+                onClose={() => setIsDialogOpen(false)}
+                onUploadSuccess={handleUploadSuccess}
+            />
         </div>
     );
 }
