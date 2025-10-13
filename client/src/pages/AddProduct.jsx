@@ -61,7 +61,6 @@ export default function AddProduct({ existingProduct, onClose, isEdit }) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const handleUploadSuccess = () => {
-        // optional: refresh product list after bulk upload
         console.log("Upload successful");
     };
 

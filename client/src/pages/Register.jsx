@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { register } from "../api/auth";
 import Logo from "../assets/company_logo.svg";
 
-// Heroicons
+
 import { UserIcon, BuildingStorefrontIcon, EnvelopeIcon, PhoneIcon, LockClosedIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 export default function Register() {
@@ -157,7 +157,6 @@ export default function Register() {
                     {err && <p className="text-red-600 text-center text-sm mt-2">{err}</p>}
                 </form>
 
-                {/* Links */}
                 <p className="mt-4 text-sm text-center text-gray-600">
                     Already have an account?{" "}
                     <Link to="/" className="text-[#3b38a0] hover:underline">

@@ -25,7 +25,7 @@ export default function ListProduct() {
         loadProducts();
     }, []);
 
-    // Delete product
+
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to delete this product?")) return;
 
@@ -140,7 +140,6 @@ export default function ListProduct() {
                 </div>
             </div>
 
-            {/* Tailwind Modal */}
             {open && (
                 <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
                     <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6">
