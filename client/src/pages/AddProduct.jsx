@@ -1,13 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import { addProduct } from "../api/products";
-import { Package, Barcode, DollarSign, Hash, Tag, FileText } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { addProduct, updateProduct } from "../api/products";
+import { Package, Tag, DollarSign, Hash, FileText } from "lucide-react";
 
-export default function AddProduct() {
+export default function AddProduct({ existingProduct, onClose, isEdit }) {
     const [form, setForm] = useState({
         name: "",
-        code: "",
         category: "",
         price: "",
         cost: "",
@@ -16,7 +13,21 @@ export default function AddProduct() {
         quantity: "",
     });
     const [err, setErr] = useState("");
-    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isEdit && existingProduct) {
+            setForm({
+                name: existingProduct.name || "",
+                category: existingProduct.category || "",
+                price: existingProduct.price?.toString() || "",
+                cost: existingProduct.cost?.toString() || "",
+                brand: existingProduct.brand || "",
+                description: existingProduct.description || "",
+                quantity: existingProduct.quantity?.toString() || "",
+            });
+        }
+    }, [existingProduct, isEdit]);
+
 
     const handleChange = (e) =>
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,55 +35,46 @@ export default function AddProduct() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setErr("");
+        const token = localStorage.getItem("token");
+
         try {
-            const token = localStorage.getItem("token");
-            await addProduct(
-                {
-                    ...form,
-                    price: Number(form.price),
-                    cost: Number(form.cost),
-                    quantity: Number(form.quantity),
-                },
-                token
-            );
-            navigate("/products");
+            const payload = {
+                ...form,
+                price: Number(form.price),
+                cost: Number(form.cost),
+                quantity: Number(form.quantity),
+            };
+
+            if (isEdit) {
+                await updateProduct(existingProduct._id, payload, token);
+            } else {
+                await addProduct(payload, token);
+            }
+
+            if (onClose) onClose();
         } catch (error) {
-            setErr(error.response?.data?.msg || "Failed to add product");
+            setErr(error.response?.data?.msg || "Failed to save product");
         }
     };
 
     return (
-
         <div className="max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
-            {/* Header */}
-            <h1 className="text-2xl font-bold text-[#3b38a0] mb-1 flex items-center">
-                Add New Product
+            <h1 className="text-2xl font-bold text-[#3b38a0] mb-1">
+                {isEdit ? "Edit Product" : "Add New Product"}
             </h1>
-            <p className="text-gray-500 mb-6">Enter product details below</p>
+            <p className="text-gray-500 mb-6">
+                {isEdit ? "Modify product details below" : "Enter product details below"}
+            </p>
 
-            {/* Form */}
             <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
                 {/* Product Name */}
-                <div className="relative">
+                <div className="md:col-span-2 relative">
                     <Package className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                     <input
                         name="name"
                         value={form.name}
                         onChange={handleChange}
                         placeholder="Product Name *"
-                        required
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2e2a80] focus:outline-none"
-                    />
-                </div>
-
-                {/* Code */}
-                <div className="relative">
-                    <Barcode className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                    <input
-                        name="code"
-                        value={form.code}
-                        onChange={handleChange}
-                        placeholder="Code *"
                         required
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#2e2a80] focus:outline-none"
                     />
@@ -92,11 +94,10 @@ export default function AddProduct() {
                         <option value="Electronics">Electronics</option>
                         <option value="Clothing">Clothing</option>
                         <option value="Accessories">Accessories</option>
-                        <option value="Accessories">Grocery</option>
+                        <option value="Grocery">Grocery</option>
                         <option value="Fresh">Fresh</option>
                         <option value="Stationary">Stationary</option>
                         <option value="Others">Others</option>
-
                     </select>
                 </div>
 
@@ -173,18 +174,20 @@ export default function AddProduct() {
 
                 {/* Actions */}
                 <div className="md:col-span-2 flex justify-end gap-4 mt-4">
-                    <button
-                        type="button"
-                        onClick={() => navigate("/products")}
-                        className="px-6 py-2 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-100 transition"
-                    >
-                        Cancel
-                    </button>
+                    {onClose && (
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-6 py-2 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-100 transition"
+                        >
+                            Cancel
+                        </button>
+                    )}
                     <button
                         type="submit"
                         className="px-6 py-2 bg-[#3b38a0] text-white rounded-lg hover:bg-[#2e2a80] transition"
                     >
-                        Add Product
+                        {isEdit ? "Save Changes" : "Add Product"}
                     </button>
                 </div>
             </form>

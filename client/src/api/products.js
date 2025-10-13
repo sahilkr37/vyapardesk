@@ -14,3 +14,16 @@ export function addProduct(data, token) {
         headers: { Authorization: `Bearer ${token}` }
     });
 }
+
+// Update a product
+export function updateProduct(id, data, token) {
+    return axios.put(`${BASE_URL}/api/products/${id}`, data, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+}
+// Delete a product by ID
+export function deleteProduct(id, token) {
+    return axios.delete(`${BASE_URL}/api/products/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+    });
+}
