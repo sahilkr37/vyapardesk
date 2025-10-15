@@ -66,7 +66,7 @@ export default function AddProduct({ existingProduct, onClose, isEdit }) {
 
 
     return (
-        <div className="ml-70 w-5xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
+        <div className="ml-50 w-5xl mx-auto bg-white p-8 rounded-2xl shadow-lg">
             <h1 className="text-2xl font-bold text-[#3b38a0] mb-1">
                 {isEdit ? "Edit Product" : "Add New Product"}
             </h1>
